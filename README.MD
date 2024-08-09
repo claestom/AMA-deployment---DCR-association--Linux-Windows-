@@ -11,6 +11,7 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Azure credentials (Tenant ID, Client ID, Client Secret)
 - Data Collection Rule ID
 - Client ID for Azure Monitor Agent
+- Make sure to have the *System Assigned Managed Identity* enabled on the VMs you are targetting
 
 ## Installation
 
