@@ -85,7 +85,3 @@ The script includes the following key components:
         except HttpResponseError as e:
             print(f"An error occurred: {e}")
     ```
-
-## License
-
-This project is licensed under the MIT License.
