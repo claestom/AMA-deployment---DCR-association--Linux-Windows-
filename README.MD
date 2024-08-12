@@ -4,6 +4,12 @@ This script installs the Azure Monitor Agent on an Azure Virtual Machine using t
 
 Once the AMA is being deployed, it will be associated with the specified Data Collection Rule specified in the script. In case the user wants to enable the VM Insights feature on the VM, the ARM template of this DCR is provided in the repo as well under vminsightsdcr.json. This can be deployed to Azure via the custom template deployment in Azure or through PowerShell or Azure CLI.
 
+## Resources
+
+* [Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/)
+* [Azure Monitor Agent: introduction](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview)
+* [Data collection rule: introduction](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-data-collection)
+
 ## Prerequisites
 
 - Python 3.x
@@ -12,6 +18,8 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Data Collection Rule ID
 - Client ID for Azure Monitor Agent
 - Make sure to have the *System Assigned Managed Identity* enabled on the VMs you are targetting
+
+**Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
 ## Installation
 
