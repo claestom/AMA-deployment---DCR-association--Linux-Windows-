@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from azure.identity import ClientSecretCredential
 from azure.mgmt.subscription import SubscriptionClient
 from azure.mgmt.compute import ComputeManagementClient
@@ -6,11 +7,14 @@ from azure.mgmt.monitor import MonitorManagementClient
 from azure.mgmt.monitor.models import DataCollectionRuleAssociationProxyOnlyResource
 from azure.core.exceptions import HttpResponseError
 
-TENANT_ID = ""
-CLIENT_ID = ""
-CLIENT_SECRET = ""
-DATA_COLLECTION_RULE_ID = ""
-CLIENT_ID_AMA = ""
+load_dotenv()
+
+# Retrieve the credentials from environment variables
+TENANT_ID = os.getenv("TENANT_ID")
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+DATA_COLLECTION_RULE_ID = os.getenv("DATA_COLLECTION_RULE_ID")
+CLIENT_ID_AMA = os.getenv("CLIENT_ID_AMA")
 
 def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_group):
     extension_parameters = {
