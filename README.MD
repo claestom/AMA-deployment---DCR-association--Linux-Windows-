@@ -35,16 +35,17 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 
 ## Usage
 
-1. Set your Azure credentials and other required IDs in the script:
+1. Create a new file called ".env" in the folder
+2. Add to the .env file your Azure credentials and other required IDs in the script:
     ```python
-    TENANT_ID = "your-tenant-id"
-    CLIENT_ID = "your-client-id"
-    CLIENT_SECRET = "your-client-secret"
-    DATA_COLLECTION_RULE_ID = "your-data-collection-rule-id"
-    CLIENT_ID_AMA = "your-client-id-ama"
+    TENANT_ID=your-tenant-id
+    CLIENT_ID=your-client-id
+    CLIENT_SECRET=your-client-secret
+    DATA_COLLECTION_RULE_ID=your-data-collection-rule-id
+    CLIENT_ID_AMA=your-client-id-ama
     ```
 
-2. Run the script to install the VM extension:
+3. Run the script to install the VM extension:
     ```sh
     python script.py
     ```
