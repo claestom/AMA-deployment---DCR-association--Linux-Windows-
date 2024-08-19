@@ -3,3 +3,4 @@ azure-mgmt-subscription
 azure-mgmt-compute
 azure-mgmt-monitor
 python-dotenv
+azure-mgmt-resource
