@@ -17,11 +17,16 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 DATA_COLLECTION_RULE_ID = os.getenv("DATA_COLLECTION_RULE_ID")
 CLIENT_ID_AMA = os.getenv("CLIENT_ID_AMA")
 
+# Tag key/value pairs
+
+VM_TAG = ["amainstall", "true"]
+SUBSCRIPTION_TAG = ["amainstall", "true"]
+
 def check_tag_subscription(subscription_id, credential):
     resource_client = ResourceManagementClient(credential, subscription_id)
     subscription_tags = resource_client.tags.get_at_scope(f"/subscriptions/{subscription_id}")
     tags = subscription_tags.properties.tags
-    if tags.get("amainstall") == "true":
+    if tags.get(SUBSCRIPTION_TAG[0]) == SUBSCRIPTION_TAG[1]:
         print(f"Subscription {subscription_id} has the required tags. Proceeding.")
         return True
     else:
@@ -79,7 +84,7 @@ def process_vm(vm, compute_client, monitor_client, subscription_id):
     tags = vm.tags
     os_profile = vm.os_profile
     
-    if tags and tags.get("amainstall") == "true":
+    if tags and tags.get(VM_TAG[0]) == VM_TAG[1]:
         if os_profile.windows_configuration:
             install_vm_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
         elif os_profile.linux_configuration:
