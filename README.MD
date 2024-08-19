@@ -21,6 +21,12 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
+### If your VM is running on-premises or in a different cloud provider, please go throug the following steps first:
+
+## Arc enable the VM
+
+In order to install the Azure Monitor Agent on Virtual Machines outside of Azure, it is required to onboard these VMs using the Azure Arc Agent. Using [following link](https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options), you will find multiple onboarding options: Group Policy, PowerShell, SCVMM, Service Principal...
+
 ## Installation
 
 1. Clone the repository or download the script.
