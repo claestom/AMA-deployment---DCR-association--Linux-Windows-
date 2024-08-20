@@ -14,7 +14,7 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 
 - Python 3.x
 - Azure SDK for Python
-- Azure credentials (Tenant ID, Client ID, Client Secret)
+- Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret)
 - Data Collection Rule ID
 
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
