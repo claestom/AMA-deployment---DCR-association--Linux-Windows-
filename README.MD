@@ -34,7 +34,25 @@ In order to install the Azure Monitor Agent on Virtual Machines outside of Azure
     ```sh
     cd "AMA-deployment---DCR-association--Linux-Windows-"
     ```
-3. Install the required Python packages:
+3. Create a new virtual environment
+    ```sh
+    python -m venv .
+    ```
+4. Activate the new virtual environment
+    
+    *Powershell*
+    ```sh
+    .venv\Scripts\Activate.ps1
+    ```
+    *Command Prompt Windows*
+    ```sh
+    .venv\Scripts\activate.bat
+    ```
+    *Mac/Linux*
+    ```sh
+    .venv/bin/activate
+    ```
+5. Install the required Python packages:
     ```sh
     pip install -r requirements.txt
     ```
