@@ -58,7 +58,7 @@ def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_g
     extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
     extensions = extensions_result.value  # Access the list of extensions
     if not extensions or any(extension.name not in ["AzureMonitorWindowsAgent", "AzureMonitorLinuxAgent"] for extension in extensions):
-        print(f"No extensions found on VM {vm_name}. Proceeding with installation.")
+        print(f"No Azure Monitor Agent extension found on VM {vm_name}.")
         try:
                 compute_client.virtual_machine_extensions.begin_create_or_update(
                     resource_group_name=resource_group,
