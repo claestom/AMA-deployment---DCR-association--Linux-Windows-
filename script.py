@@ -7,6 +7,7 @@ from azure.mgmt.monitor import MonitorManagementClient
 from azure.mgmt.monitor.models import DataCollectionRuleAssociationProxyOnlyResource
 from azure.mgmt.resource import ResourceManagementClient
 from azure.core.exceptions import HttpResponseError
+from azure.mgmt.compute.models import VirtualMachineIdentity, ResourceIdentityType
 
 load_dotenv()
 
@@ -21,6 +22,19 @@ CLIENT_ID_AMA = os.getenv("CLIENT_ID_AMA")
 
 VM_TAG = ["amainstall", "true"]
 SUBSCRIPTION_TAG = ["amainstall", "true"]
+
+def enable_system_assigned_identity(resource_group_name, vm_name, subscription_id, credential):
+    compute_client = ComputeManagementClient(credential, subscription_id)
+    vm = compute_client.virtual_machines.get(resource_group_name, vm_name)
+
+    if vm.identity and vm.identity.type == ResourceIdentityType.system_assigned:
+        print(f"VM: {vm_name} already has a system-assigned managed identity enabled. Proceeding with the script.")
+    else:
+        print(f"Enabling system-assigned managed identity for VM: {vm_name}")
+        vm.identity = VirtualMachineIdentity(type=ResourceIdentityType.system_assigned)
+        async_vm_update = compute_client.virtual_machines.begin_create_or_update(resource_group_name, vm_name, vm)
+        async_vm_update.result()
+        print(f"System-assigned managed identity enabled for VM: {vm_name}")
 
 def check_tag_subscription(subscription_id, credential):
     resource_client = ResourceManagementClient(credential, subscription_id)
@@ -68,7 +82,7 @@ def associate_data_collection_rule(monitor_client, vm, vm_name):
     except HttpResponseError as e:
         print(f"Failed to associate VM {vm_name} with Data Collection Rule. Error: {e}")
 
-def process_vm(vm, compute_client, monitor_client, subscription_id):
+def process_vm(vm, compute_client, monitor_client, subscription_id, credential):
     vm_name = vm.name
     resource_group = vm.id.split("/")[4]
     instance_view = compute_client.virtual_machines.instance_view(resource_group, vm_name)
@@ -85,6 +99,7 @@ def process_vm(vm, compute_client, monitor_client, subscription_id):
     os_profile = vm.os_profile
     
     if tags and tags.get(VM_TAG[0]) == VM_TAG[1]:
+        enable_system_assigned_identity(resource_group, vm.name, subscription_id, credential)
         if os_profile.windows_configuration:
             install_vm_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
         elif os_profile.linux_configuration:
@@ -105,7 +120,7 @@ def process_subscription(subscription, credential):
     monitor_client = MonitorManagementClient(credential, subscription_id)
     
     for vm in compute_client.virtual_machines.list_all():
-        process_vm(vm, compute_client, monitor_client, subscription_id)
+        process_vm(vm, compute_client, monitor_client, subscription_id, credential)
 
 def main():
     # Authenticate using the service principal
