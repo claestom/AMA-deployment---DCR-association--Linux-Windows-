@@ -57,9 +57,9 @@ def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_g
     }
     extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
     extensions = extensions_result.value  # Access the list of extensions
-    for extension in extensions:
-        if extension.name not in ["AzureMonitorWindowsAgent", "AzureMonitorLinuxAgent"]:
-            try:
+    if not extensions or any(extension.name not in ["AzureMonitorWindowsAgent", "AzureMonitorLinuxAgent"] for extension in extensions):
+        print(f"No extensions found on VM {vm_name}. Proceeding with installation.")
+        try:
                 compute_client.virtual_machine_extensions.begin_create_or_update(
                     resource_group_name=resource_group,
                     vm_name=vm_name,
@@ -67,12 +67,10 @@ def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_g
                     extension_parameters=extension_parameters
                 ).result()
                 print(f"{extension_name} installed on VM {vm_name}.")
-            except HttpResponseError as e:
+        except HttpResponseError as e:
                 print(f"Failed to install {extension_name} on VM {vm_name}. Error: {e}")
-            break
-        else:
-            print(f"{extension_name} already installed on VM {vm_name}.")
-            break
+    else:
+        print(f"{extension_name} already installed on VM {vm_name}.")
 
 def associate_data_collection_rule(monitor_client, vm, vm_name):
     association_parameters = DataCollectionRuleAssociationProxyOnlyResource(
