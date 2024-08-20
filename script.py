@@ -16,7 +16,6 @@ TENANT_ID = os.getenv("TENANT_ID")
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 DATA_COLLECTION_RULE_ID = os.getenv("DATA_COLLECTION_RULE_ID")
-CLIENT_ID_AMA = os.getenv("CLIENT_ID_AMA")
 
 # Tag key/value pairs
 

@@ -16,7 +16,6 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Azure SDK for Python
 - Azure credentials (Tenant ID, Client ID, Client Secret)
 - Data Collection Rule ID
-- Client ID for Azure Monitor Agent
 
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
@@ -65,7 +64,6 @@ In order to install the Azure Monitor Agent on Virtual Machines outside of Azure
     CLIENT_ID=your-client-id
     CLIENT_SECRET=your-client-secret
     DATA_COLLECTION_RULE_ID=your-data-collection-rule-id
-    CLIENT_ID_AMA=your-client-id-ama
     ```
 
 3. Run the script to install the VM extension:
