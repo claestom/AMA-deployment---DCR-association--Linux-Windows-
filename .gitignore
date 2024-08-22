@@ -1,3 +1,4 @@
-# Ignore the .env file
+# Ignore the following file
 
 .vscode
+pyvenv.cfg
