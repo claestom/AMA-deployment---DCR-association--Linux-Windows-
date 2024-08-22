@@ -73,8 +73,12 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
     ```sh
     cd "local-script"
     ```
-2. Create a new file called ".env" in the folder
-3. Add to the .env file your Azure credentials and other required IDs in the script:
+2. Open Visual Studio
+    ```sh
+    code .
+    ```
+3. Create a new file called ".env" in the folder
+4. Add to the .env file your Azure credentials and other required IDs in the script:
     ```python
     TENANT_ID=your-tenant-id
     CLIENT_ID=your-client-id
@@ -82,7 +86,7 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
     DATA_COLLECTION_RULE_ID=your-data-collection-rule-id
     ```
 
-4. Run the script to install the VM extension:
+5. Run the script to install the VM extension:
     ```sh
     python script.py
     ```
