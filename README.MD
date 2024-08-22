@@ -52,15 +52,15 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
     
     *Powershell*
     ```sh
-    .venv\Scripts\Activate.ps1
+    .venv\Scripts\Activate.ps1 or Scripts\Activate.ps1
     ```
     *Command Prompt Windows*
     ```sh
-    .venv\Scripts\activate.bat
+    .venv\Scripts\activate.bat or Scripts\activate.bat
     ```
     *Mac/Linux*
     ```sh
-    .venv/bin/activate
+    .venv/bin/activate or bin/activate
     ```
 5. Install the required Python packages:
     ```sh
