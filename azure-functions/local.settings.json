@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": true,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+    "TENANT_ID" : "",
+    "CLIENT_ID" : "",
+    "CLIENT_SECRET" : "",
+    "DATA_COLLECTION_RULE_ID" : ""
+  }
+}
