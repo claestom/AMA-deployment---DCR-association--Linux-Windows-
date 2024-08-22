@@ -89,6 +89,8 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
 
 ## Integration with Azure Functions
 
+TO BE ADDED SOON
+
 ## Code Overview
 
 ### `script.py`
