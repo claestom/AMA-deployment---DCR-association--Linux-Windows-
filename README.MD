@@ -1,4 +1,4 @@
-# Azure VM Extension Installer
+# Automate the observability of your VMs using Python
 
 This script installs the Azure Monitor Agent on an Azure Virtual Machine using the Azure SDK for Python. Supported OS: Linux & Windows.
 
@@ -14,20 +14,32 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 
 - Python 3.x
 - Azure SDK for Python
-- Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret)
-- Data Collection Rule ID
+- Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret). Note: store the ClientSecret somewhere as it will not be displayed again after creation.
+- Data Collection Rule ID (below more information on how to create this)
 
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
-### If your VM is running on-premises or in a different cloud provider, please go throug the following steps first:
-
-## Arc enable the VM
+### If your VM is running on-premises or in a different cloud provider, you need to first Arc enable the VM:
 
 In order to install the Azure Monitor Agent on Virtual Machines outside of Azure, it is required to onboard these VMs using the Azure Arc Agent. Using [following link](https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options), you will find multiple onboarding options: Group Policy, PowerShell, SCVMM, Service Principal...
 
-## Installation
+### Data Collection rule
 
-1. Clone the repository or download the script.
+Data collection rules (DCRs) are stored in Azure so they can be centrally deployed and managed like any other Azure resource. They're sets of instructions supporting data collection using the Azure Monitor pipeline. More information [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview).
+
+* If you would like to enable VM Insights on the VM, you can leverage the [DCR ARM template](vminsightsdcr.json). 
+
+    More information how to deploy this template can be found [here](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/quickstart-create-templates-use-the-portal). Note: in the third step of the tutorial, select "Build your own template in the editor". Copy paste the content from this [DCR ARM template](vminsightsdcr.json) into the editor. Next, click "save" and follow the next steps.
+
+* If you want to only select a defined type of metrics and/or logs, you can customize your DCR by creating them yourself. How to do this is explained [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-create-edit?tabs=portal), with tools like the Portal, Az CLI, PS, APIs or ARM.
+
+Once the DCR is being created, go to the DCR instance in the Portal and retrieve the Resource ID. You can find this ID if you go to JSON VIEW if you are in the DCR in the Portal (see red rectangle).
+
+![alt text](imgs/DCR%20resource%20ID.png)
+
+## Installation of environment
+
+1. Clone the repository or download the script ([how does this work?](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository))
 2. Go to the cloned repository
     ```sh
     cd "AMA-deployment---DCR-association--Linux-Windows-"
@@ -55,10 +67,14 @@ In order to install the Azure Monitor Agent on Virtual Machines outside of Azure
     pip install -r requirements.txt
     ```
 
-## Usage
+## Local usage to test
 
-1. Create a new file called ".env" in the folder
-2. Add to the .env file your Azure credentials and other required IDs in the script:
+1. Enter the *local-script* folder
+    ```sh
+    cd "local-script"
+    ```
+2. Create a new file called ".env" in the folder
+3. Add to the .env file your Azure credentials and other required IDs in the script:
     ```python
     TENANT_ID=your-tenant-id
     CLIENT_ID=your-client-id
@@ -66,10 +82,12 @@ In order to install the Azure Monitor Agent on Virtual Machines outside of Azure
     DATA_COLLECTION_RULE_ID=your-data-collection-rule-id
     ```
 
-3. Run the script to install the VM extension:
+4. Run the script to install the VM extension:
     ```sh
     python script.py
     ```
+
+## Integration with Azure Functions
 
 ## Code Overview
 
