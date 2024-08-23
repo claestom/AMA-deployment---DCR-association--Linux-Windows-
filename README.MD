@@ -47,6 +47,9 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
 ## Installation of environment
 
 1. Clone the repository or download the script ([how does this work?](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository))
+    ```sh
+    git clone https://github.com/claestom/AMA-deployment---DCR-association--Linux-Windows-.git
+    ```
 2. Go to the cloned repository
     ```sh
     cd "AMA-deployment---DCR-association--Linux-Windows-"
