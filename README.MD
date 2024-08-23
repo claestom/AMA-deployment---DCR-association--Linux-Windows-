@@ -109,9 +109,9 @@ In the next section, we will undertake following steps:
 - Create an Azure Function App
 - Develop an Azure Function locally using Visual Studio
 - Deploy the code and configurations to Azure
-- Subscribe the Azure Function App to the Event Grid Topic ([Event Grid Trigger](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-grid-trigger?WT.mc_id=AZ-MVP-5003203&tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv3&pivots=programming-language-python))
 - Create an Event Grid System Topic
 - Create an Event Subscription on new Virtual Machines being created
+- Subscribe the Azure Function App to the Event Grid Topic ([Event Grid Trigger](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-grid-trigger?WT.mc_id=AZ-MVP-5003203&tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv3&pivots=programming-language-python))
 
 High level the flow looks like this:
 
