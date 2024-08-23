@@ -2,8 +2,13 @@
 
 Commands to use:
 
-- Publish the function app to Azure: func azure functionapp publish azf-am-automation
-- Publish local settings to Azure: func azure functionapp publish azf-am-automation --publish-local-settings
+If you want to publish the function & the env settings to Azure, you can use the following commands:
+
+- Publish local settings to Azure: func azure functionapp publish <Function App name> --publish-local-settings
+
+If you want to publish only the new env changes to Azure, you can use the following command:
+
+- func azure functionapp publish <Function App name> --publish-local-settings --publish-settings-only
 
 """
 
