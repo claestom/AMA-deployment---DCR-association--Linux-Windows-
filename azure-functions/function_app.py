@@ -50,7 +50,7 @@ def eventGridTest(event: func.EventGridEvent):
     subscription_client = SubscriptionClient(credential)
     
     for subscription in subscription_client.subscriptions.list():
-        if check_tag_subscription(subscription.subscription_id, credential):
+        if check_tag_subscription(subscription.subscription_id, credential) or all(element == "" for element in SUBSCRIPTION_TAG):
             process_subscription(subscription, credential)
 
 def enable_system_assigned_identity(resource_group_name, vm_name, subscription_id, credential):
@@ -134,7 +134,7 @@ def process_vm(vm, compute_client, monitor_client, subscription_id, credential):
     tags = vm.tags
     os_profile = vm.os_profile
     
-    if tags and tags.get(VM_TAG[0]) == VM_TAG[1]:
+    if tags and tags.get(VM_TAG[0]) == VM_TAG[1] or all(element == "" for element in VM_TAG):
         enable_system_assigned_identity(resource_group, vm.name, subscription_id, credential)
         if os_profile.windows_configuration:
             install_vm_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
