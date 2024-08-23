@@ -37,8 +37,8 @@ DATA_COLLECTION_RULE_ID = os.environ.get("DATA_COLLECTION_RULE_ID")
 
 # Tag key/value pairs
 
-VM_TAG = ["amainstall", "true"]
-SUBSCRIPTION_TAG = ["amainstall", "true"]
+VM_TAG = ["", ""]
+SUBSCRIPTION_TAG = ["", ""]
 
 @app.function_name(name="eventGridTrigger")
 @app.event_grid_trigger(arg_name="event")

@@ -17,6 +17,13 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret). Note: store the ClientSecret somewhere as it will not be displayed again after creation.
 - Data Collection Rule ID (below more information on how to create this)
 
+Next prerequisites only apply if you want to automate the script using Azure Functions
+
+- Azure CLI ([how to install](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli))
+- Azure Functions Core Tools ([how to install](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-python#install-the-azure-functions-core-tools))
+- Visual Studio ([how to download](https://code.visualstudio.com/Download))
+- Azure Functions Extension on Visual Studio ([how to install](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions))
+
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
 ### If your VM is running on-premises or in a different cloud provider, you need to first Arc enable the VM:
@@ -93,7 +100,129 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
 
 ## Integration with Azure Functions
 
-TO BE ADDED SOON
+The goal of integrating Azure Functions with our script is to enable automation. Azure Functions allows you to configure a trigger that initiates the script. In our case, the trigger will be the creation of a new virtual machine. To achieve this, we will integrate with Event Grid.
+
+More information: [Azure Functions](https://learn.microsoft.com/en-us/azure/azure-functions/) and [Event Grid](https://learn.microsoft.com/en-us/azure/event-grid/overview).
+
+In the next section, we will undertake following steps:
+
+- Create an Azure Function App
+- Develop an Azure Function locally using Visual Studio
+- Deploy the code and configurations to Azure
+- Subscribe the Azure Function App to the Event Grid Topic ([Event Grid Trigger](https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-grid-trigger?WT.mc_id=AZ-MVP-5003203&tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cextensionv3&pivots=programming-language-python))
+- Create an Event Grid System Topic
+- Create an Event Subscription on new Virtual Machines being created
+
+High level the flow looks like this:
+
+<p align="center">
+<img src="imgs/Architecture.png" width="850" />
+</p>
+
+
+### Get started:
+
+#### Azure Functions
+
+We will first create a resource group & storage account as these are required in order to create an Azure Function App. 
+
+1.  Authenticate to Azure
+    ```sh
+    az login
+    ```
+
+2. Set variables
+
+    *If working in PowerShell*:
+    ```sh
+    $ResourceGroup = "<insert name>"
+    $StorageAccount = "<insert name>"
+    $Location = "<set location>"
+    $AzFunctionsName = "<insert name>"
+    ```
+    *If using Command Prompt*:
+    ```sh
+    SET ResourceGroup = "<insert name>"
+    SET StorageAccount = "<insert name>"
+    SET Location = "<set location>"
+    SET AzFunctionsName = "<insert name>"
+    ```
+*In the following steps, I assume that PowerShell is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
+
+3. Create a resource group
+    ```sh
+    az group create --name $ResourceGroup --location $Location
+    ```
+4. Create a storage account
+    ```sh
+    az storage account create --name $StorageAccount --resource-group $ResourceGroup
+5. Run following Azure CLI command
+    ```sh
+    az functionapp create --resource-group $ResourceGroup --name $AzFunctionsName --storage-account $StorageAccount --consumption-plan-location $Location --runtime python --os-type Linux
+    ```
+6. Navigate to the *azure-functions* folder within the cloned repository
+    ```sh
+    cd ../azure-functions
+    ```
+7. Open Visual Studio Code
+    ```sh
+    code .
+    ```
+8. You will receive following pop-up & Select **YES**. This will configure your environment.
+
+<p align="center">
+<img src="imgs/Azure Functions initializer.png" width="400" />
+</p>
+
+9. Go to the file explorer (top left) or press CTRL-SHIFT-E
+10. Open **local.settings.json** and fill in your credentials & press CTRL-S
+11. Run following command
+    ```sh
+    func azure functionapp publish $AzFunctionsName --publish-local-settings
+    ```
+IMPORTANT: When prompted with ***Would you like to overwrite value in azure? [yes/no/show]*** --> SELECT <b><u>NO</u></b>
+
+
+#### Event Grid System Topic
+
+1. Create an Event Grid System Topic: [Portal](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics), [Azure CLI](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics-cli) or [ARM template](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics-arm)
+
+    Take as Topic Type: Azure Resource Notifications - Resource Management events
+
+2. Select the Event Grid System Topic
+3. Select "+ Event Subscription"
+4. Enter a name
+5. Select for "Filter to Event Types": **Resource Created or Updated**
+6. Select for EndpointType: **Azure Function**
+7. Click on *Configure an endpoint*
+8. Select your subscription, resourcegroup, Function App & Function. Next press **Confirm Selection**
+9. Go to the **Filters** tab
+10. Press *Add new filter* in the Advanced Filters section
+11. As *Key*, enter: 
+    ```sh
+    data.resourceInfo.type
+    ```
+12. As *Operator*, select:
+    ```sh
+    String ends with
+    ```
+13. As *Value*, enter:
+    ```sh 
+    virtualMachines
+    ```
+14. Press **Create**
+
+### Test by creating a VM and check whether the following happens: 
+1. VM gets assigned a System Assigned Managed Identity
+2. AMA gets deployed on the VM
+3. VM gets associated with the defined DCR 
+4. Data is flowing in
+
+### Use of Tags
+
+In the script you will see on line 40 and 41 the option to insert tags key/value pairs. The goal of this is to allow filtering at a subscription or resource level.
+
+Example: you only want to enable monitoring on subscriptions with a specific tags (e.g., VMMonitoring = True). The same goes for VMs (e.g., you only want monitoring applied on VMs in production environment with tags Env = Prod).
 
 ## Code Overview
 
