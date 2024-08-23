@@ -26,7 +26,7 @@ Next prerequisites only apply if you want to automate the script using Azure Fun
 
 **Note**: Ensure that your Linux or Windows OS version is supported by the Azure Monitor Agent. You can check the full list [here](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-supported-operating-systems).
 
-### If your VM is running on-premises or in a different cloud provider, you need to first Arc enable the VM:
+> If your VM is running on-premises or in a different cloud provider, you need to first Arc enable the VM.
 
 In order to install the Azure Monitor Agent on Virtual Machines outside of Azure, it is required to onboard these VMs using the Azure Arc Agent. Using [following link](https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options), you will find multiple onboarding options: Group Policy, PowerShell, SCVMM, Service Principal...
 
@@ -220,7 +220,7 @@ IMPORTANT: When prompted with ***Would you like to overwrite value in azure? [ye
 
 ### Use of Tags
 
-In the script you will see on line 40 and 41 the option to insert tags key/value pairs. The goal of this is to allow filtering at a subscription or resource level.
+In the [script](azure-functions\function_app.py) you will see on line 40 and 41 the option to insert tags key/value pairs. The goal of this is to allow filtering at a subscription or resource level.
 
 Example: you only want to enable monitoring on subscriptions with a specific tags (e.g., VMMonitoring = True). The same goes for VMs (e.g., you only want monitoring applied on VMs in production environment with tags Env = Prod).
 
