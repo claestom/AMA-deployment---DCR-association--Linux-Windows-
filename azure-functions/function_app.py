@@ -40,6 +40,10 @@ DATA_COLLECTION_RULE_ID = os.environ.get("DATA_COLLECTION_RULE_ID")
 VM_TAG = ["", ""]
 SUBSCRIPTION_TAG = ["", ""]
 
+# Dependency agent installation: True or False
+
+DEP_AGENT = True
+
 @app.function_name(name="eventGridTrigger")
 @app.event_grid_trigger(arg_name="event")
 def eventGridTest(event: func.EventGridEvent):
