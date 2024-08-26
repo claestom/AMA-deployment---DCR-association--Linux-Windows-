@@ -167,16 +167,12 @@ We will first create a resource group & storage account as these are required in
 
     *If working in PowerShell*:
     ```sh
-    $ResourceGroup = "<insert name>"
     $StorageAccount = "<insert name>"
-    $Location = "<set location>"
     $AzFunctionsName = "<insert name>"
     ```
     *If using Command Prompt*:
     ```sh
-    SET ResourceGroup = "<insert name>"
     SET StorageAccount = "<insert name>"
-    SET Location = "<set location>"
     SET AzFunctionsName = "<insert name>"
     ```
 *Make sure to set a unique name for the Storage Account, as it needs to be **globally unique**. Also, take into account the following conditions: "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."*
