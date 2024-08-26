@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "WorkspaceResourceId": {
-            "value": "/subscriptions/089756e2-63cb-46af-ab4f-e145a774ae05/resourcegroups/rg-test-26aug/providers/microsoft.operationalinsights/workspaces/law001ama"
+            "value": ""
         },
         "WorkspaceLocation": {
-            "value": "westeurope"
+            "value": ""
         },
         "userGivenDcrName": {
-            "value": "eurofins-dcr-perf-map"
+            "value": ""
         }
     }
 }
