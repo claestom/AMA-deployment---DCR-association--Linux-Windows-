@@ -16,6 +16,7 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Azure SDK for Python
 - Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret). Note: store the ClientSecret somewhere as it will not be displayed again after creation.
 - Data Collection Rule ID (below more information on how to create this)
+- Log Analytics Workspace
 
 Next prerequisites only apply if you want to automate the script using Azure Functions
 
@@ -29,21 +30,6 @@ Next prerequisites only apply if you want to automate the script using Azure Fun
 > If your VM is running on-premises or in a different cloud provider, you need to first Arc enable the VM.
 
 In order to install the Azure Monitor Agent on Virtual Machines outside of Azure, it is required to onboard these VMs using the Azure Arc Agent. Using [following link](https://learn.microsoft.com/en-us/azure/azure-arc/servers/deployment-options), you will find multiple onboarding options: Group Policy, PowerShell, SCVMM, Service Principal...
-
-### Data Collection rule
-
-Data collection rules (DCRs) are stored in Azure so they can be centrally deployed and managed like any other Azure resource. They're sets of instructions supporting data collection using the Azure Monitor pipeline. More information [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview).
-
-* If you would like to enable VM Insights on the VM, you can leverage the [DCR ARM template](vminsightsdcr.json). 
-
-    More information how to deploy this template can be found [here](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/quickstart-create-templates-use-the-portal). Note: in the third step of the tutorial, select "Build your own template in the editor". Copy paste the content from this [DCR ARM template](vminsightsdcr.json) into the editor. Next, click "save" and follow the next steps.
-
-* If you want to only select a defined type of metrics and/or logs, you can customize your DCR by creating them yourself. How to do this is explained [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-create-edit?tabs=portal), with tools like the Portal, Az CLI, PS, APIs or ARM.
-
-Once the DCR is being created, go to the DCR instance in the Portal and retrieve the Resource ID. You can find this ID if you go to JSON VIEW if you are in the DCR in the Portal (see red rectangle).
-
-![alt text](imgs/DCR%20resource%20ID.png)
-
 ## Installation of environment
 
 1. Clone the repository or download the script ([how does this work?](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository))
@@ -76,6 +62,49 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
     ```sh
     pip install -r requirements.txt
     ```
+
+### Data Collection rule
+
+Data collection rules (DCRs) are stored in Azure so they can be centrally deployed and managed like any other Azure resource. They're sets of instructions supporting data collection using the Azure Monitor pipeline. More information [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview).
+
+* If you would like to enable VM Insights on the VM, you can leverage the [DCR ARM templates](dcr-templates) in this repository. 
+
+    You can deploy this using following commands:
+
+    If you want to enable both Performance and Map experience of VM Insights
+    ```sh
+    cd dcr-templates/PerfAndMapDcr
+    ```
+    If you want to enable only Performance experience of VM Insights.
+    ```sh
+    cd dcr-templates/PerfOnlyDCR
+    ```
+    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json)
+    
+    Before deploying the DCR, first set following variables. Note: these are used again further in the script.
+
+    ```sh
+    $ResourceGroup = "<insert name>"
+    $Location = "<set location>"
+    ```
+    *For the above variables, the PowerShell syntax is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
+    
+    Create a resource group
+    ```sh
+    az group create --name $ResourceGroup --location $Location
+    ```
+    Deploy the DCR template to Azure
+    ```sh
+    az deployment group create --resource-group $ResourceGroup --template-file DeployDcrTemplate.json --parameters DeployDcrParameters.json
+    ```
+
+    More information how to deploy this template can be found [here](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-enable-overview).
+
+* If you want to only select a defined type of metrics and/or logs, you can customize your DCR by creating them yourself. How to do this is explained [here](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-create-edit?tabs=portal), with tools like the Portal, Az CLI, PS, APIs or ARM.
+
+Once the DCR is being created, go to the DCR instance in the Portal and retrieve the Resource ID. You can find this ID if you go to JSON VIEW if you are in the DCR in the Portal (see red rectangle).
+
+![alt text](imgs/DCR%20resource%20ID.png)
 
 ## Local usage to test
 
@@ -154,34 +183,30 @@ We will first create a resource group & storage account as these are required in
 
 *In the following steps, I assume that PowerShell is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
 
-3. Create a resource group
-    ```sh
-    az group create --name $ResourceGroup --location $Location
-    ```
-4. Create a storage account
+3. Create a storage account
     ```sh
     az storage account create --name $StorageAccount --resource-group $ResourceGroup
-5. Run following Azure CLI command
+4. Run following Azure CLI command
     ```sh
     az functionapp create --resource-group $ResourceGroup --name $AzFunctionsName --storage-account $StorageAccount --consumption-plan-location $Location --runtime python --os-type Linux
     ```
-6. Navigate to the *azure-functions* folder within the cloned repository
+5. Navigate to the *azure-functions* folder within the cloned repository
     ```sh
     cd ../azure-functions
     ```
-7. Open Visual Studio Code
+6. Open Visual Studio Code
     ```sh
     code .
     ```
-8. You will receive following pop-up & Select **YES**. This will configure your environment.
+7. You will receive following pop-up & Select **YES**. This will configure your environment.
 
 <p align="center">
 <img src="imgs/Azure Functions initializer.png" width="400" />
 </p>
 
-9. Go to the file explorer (top left) or press CTRL-SHIFT-E
-10. Open **local.settings.json** and fill in your credentials & press CTRL-S
-11. Run following command
+8. Go to the file explorer (top left) or press CTRL-SHIFT-E
+9. Open **local.settings.json** and fill in your credentials & press CTRL-S
+10. Run following command
     ```sh
     func azure functionapp publish $AzFunctionsName --publish-local-settings
     ```
