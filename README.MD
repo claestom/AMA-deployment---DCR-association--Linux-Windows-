@@ -150,6 +150,8 @@ We will first create a resource group & storage account as these are required in
     SET Location = "<set location>"
     SET AzFunctionsName = "<insert name>"
     ```
+*Make sure to set a unique name for the Storage Account, as it needs to be **globally unique**. Also, take into account the following conditions: "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."*
+
 *In the following steps, I assume that PowerShell is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
 
 3. Create a resource group
