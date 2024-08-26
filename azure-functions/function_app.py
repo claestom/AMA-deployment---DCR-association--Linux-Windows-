@@ -77,7 +77,7 @@ def check_tag_subscription(subscription_id, credential):
         logging.info(f"Subscription {subscription_id} does not have the required tags. Skipping")
         return False
 
-def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_group):
+def install_ama_extension(compute_client, extension_name, vm, vm_name, resource_group):
     extension_parameters = {
         "location": vm.location,
         "publisher": "Microsoft.Azure.Monitor",
@@ -102,6 +102,32 @@ def install_vm_extension(compute_client, extension_name, vm, vm_name, resource_g
                 logging.info(f"Failed to install {extension_name} on VM {vm_name}. Error: {e}")
     else:
         logging.info(f"{extension_name} already installed on VM {vm_name}.")
+
+def install_map_extension(compute_client, extension_name, vm, vm_name, resource_group):
+    extension_parameters = {
+        "apiVersion" : "2015-01-01",
+        "location": vm.location,
+        "publisher": "Microsoft.Azure.Monitoring.DependencyAgent",
+        "type": extension_name,
+        "type_handler_version": "9.10",
+        "auto_upgrade_minor_version": True,
+        "settings": {"enableAMA": "true"}
+    }
+
+    extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
+    extensions = extensions_result.value  # Access the list of extensions
+    if not extensions or any(extension.name != extension_name for extension in extensions):
+        print(f"No {extension_name} found on VM {vm_name}. Proceeding with installation.")
+        try:
+                compute_client.virtual_machine_extensions.begin_create_or_update(
+                    resource_group_name=resource_group,
+                    vm_name=vm_name,
+                    vm_extension_name=extension_name,
+                    extension_parameters=extension_parameters
+                ).result()
+                print(f"{extension_name} installed on VM {vm_name}.")
+        except HttpResponseError as e:
+                print(f"Failed to install {extension_name} on VM {vm_name}. Error: {e}")
 
 def associate_data_collection_rule(monitor_client, vm, vm_name):
     association_parameters = DataCollectionRuleAssociationProxyOnlyResource(
@@ -136,12 +162,18 @@ def process_vm(vm, compute_client, monitor_client, subscription_id, credential):
     
     if tags and tags.get(VM_TAG[0]) == VM_TAG[1] or all(element == "" for element in VM_TAG):
         enable_system_assigned_identity(resource_group, vm.name, subscription_id, credential)
-        if os_profile.windows_configuration:
-            install_vm_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
-        elif os_profile.linux_configuration:
-            install_vm_extension(compute_client, "AzureMonitorLinuxAgent", vm, vm_name, resource_group)
+        if os_profile.windows_configuration and DEP_AGENT:
+            install_ama_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
+            install_map_extension(compute_client, "DependencyAgentWindows", vm, vm_name, resource_group)
+        elif os_profile.windows_configuration and not DEP_AGENT:
+             install_ama_extension(compute_client, "AzureMonitorWindowsAgent", vm, vm_name, resource_group)
+        elif os_profile.linux_configuration and DEP_AGENT:
+            install_ama_extension(compute_client, "AzureMonitorLinuxAgent", vm, vm_name, resource_group)
+            install_map_extension(compute_client, "DependencyAgentLinux", vm, vm_name, resource_group)
+        elif os_profile.linux_configuration and not DEP_AGENT:
+            install_ama_extension(compute_client, "AzureMonitorLinuxAgent", vm, vm_name, resource_group)
         else:
-            logging.info(f"VM {vm_name} has an unsupported OS. Skipping.")
+            print(f"VM {vm_name} has an unsupported OS. Skipping.")
             return
         
         associate_data_collection_rule(monitor_client, vm, vm_name)
