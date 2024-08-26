@@ -15,8 +15,6 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 - Python 3.x
 - Azure SDK for Python
 - Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret). Note: store the ClientSecret somewhere as it will not be displayed again after creation.
-- Data Collection Rule ID (below more information on how to create this)
-- Log Analytics Workspace
 
 Next prerequisites only apply if you want to automate the script using Azure Functions
 
