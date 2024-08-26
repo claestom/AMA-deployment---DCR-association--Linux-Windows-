@@ -79,22 +79,32 @@ Data collection rules (DCRs) are stored in Azure so they can be centrally deploy
     ```sh
     cd dcr-templates/PerfOnlyDCR
     ```
-    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json). *The following command will open VS Code such that you are able to edit the file.*
-    ```sh
-    code .
-    ```
     
     Before deploying the DCR, first set following variables. Note: these are used again further in the script.
 
     ```sh
     $ResourceGroup = "<insert name>"
     $Location = "<set location>"
+    $LogAnalyticsWorkspaceName = "<insert name>"
     ```
     *For the above variables, the PowerShell syntax is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
     
     Create a resource group
     ```sh
     az group create --name $ResourceGroup --location $Location
+    ```
+    Create a Log Analytics Workspace
+    ```sh
+    az monitor log-analytics workspace create --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --location $Location
+    ```
+    Retrieve the Resource ID of this Log Analytics Workspace by running following command:
+
+    ```sh
+    az monitor log-analytics workspace show --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --query id --output tsv
+    ```
+    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json). *The following command will open VS Code such that you are able to edit the file.*
+    ```sh
+    code .
     ```
     Deploy the DCR template to Azure
     ```sh
