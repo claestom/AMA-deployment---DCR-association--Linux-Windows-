@@ -106,6 +106,11 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
 
 ![alt text](imgs/DCR%20resource%20ID.png)
 
+Or run following Azure CLI command:
+```sh
+az monitor data-collection rule show --resource-group $ResourceGroup --name <name selected> --query id --output tsv
+```
+
 ## Local usage to test
 
 1. Enter the *local-script* folder
