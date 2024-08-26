@@ -79,7 +79,10 @@ Data collection rules (DCRs) are stored in Azure so they can be centrally deploy
     ```sh
     cd dcr-templates/PerfOnlyDCR
     ```
-    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json)
+    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json). *The following command will open VS Code such that you are able to edit the file.*
+    ```sh
+    code .
+    ```
     
     Before deploying the DCR, first set following variables. Note: these are used again further in the script.
 
