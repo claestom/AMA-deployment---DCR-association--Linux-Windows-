@@ -110,7 +110,7 @@ Once the DCR is being created, go to the DCR instance in the Portal and retrieve
 
 1. Enter the *local-script* folder
     ```sh
-    cd "local-script"
+    cd ../../local-script
     ```
 2. Open Visual Studio
     ```sh
@@ -246,9 +246,10 @@ IMPORTANT: When prompted with ***Would you like to overwrite value in azure? [ye
 
 ### Use of Tags
 
-In the [script](azure-functions\function_app.py) you will see on line 40 and 41 the option to insert tags key/value pairs. The goal of this is to allow filtering at a subscription or resource level.
+* In the [script](azure-functions\function_app.py) you will see on line 40 and 41 the option to insert tags key/value pairs. The goal of this is to allow filtering at a subscription or resource level.
 
-Example: you only want to enable monitoring on subscriptions with a specific tags (e.g., VMMonitoring = True). The same goes for VMs (e.g., you only want monitoring applied on VMs in production environment with tags Env = Prod).
+    Example: you only want to enable monitoring on subscriptions with a specific tags (e.g., VMMonitoring = True). The same goes for VMs (e.g., you only want monitoring applied on VMs in production environment with tags Env = Prod).
+* On line 45 you can select whether you want to enable the Dependency Map as well. More information about this feature [here](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-maps).
 
 ## Code Overview
 
