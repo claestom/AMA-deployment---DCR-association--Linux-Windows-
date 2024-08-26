@@ -121,7 +121,7 @@ def install_map_extension(compute_client, extension_name, vm, vm_name, resource_
     extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
     extensions = extensions_result.value  # Access the list of extensions
     if not extensions or any(extension.name != extension_name for extension in extensions):
-        print(f"No {extension_name} found on VM {vm_name}. Proceeding with installation.")
+        logging.info(f"No {extension_name} found on VM {vm_name}. Proceeding with installation.")
         try:
                 compute_client.virtual_machine_extensions.begin_create_or_update(
                     resource_group_name=resource_group,
@@ -129,9 +129,9 @@ def install_map_extension(compute_client, extension_name, vm, vm_name, resource_
                     vm_extension_name=extension_name,
                     extension_parameters=extension_parameters
                 ).result()
-                print(f"{extension_name} installed on VM {vm_name}.")
+                logging.info(f"{extension_name} installed on VM {vm_name}.")
         except HttpResponseError as e:
-                print(f"Failed to install {extension_name} on VM {vm_name}. Error: {e}")
+                logging.info(f"Failed to install {extension_name} on VM {vm_name}. Error: {e}")
 
 def associate_data_collection_rule(monitor_client, vm, vm_name):
     association_parameters = DataCollectionRuleAssociationProxyOnlyResource(
