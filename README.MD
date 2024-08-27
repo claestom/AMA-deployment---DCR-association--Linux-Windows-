@@ -14,9 +14,10 @@ Once the AMA is being deployed, it will be associated with the specified Data Co
 
 - Python 3.x
 - Azure SDK for Python
+- Git ([how to download](https://git-scm.com/downloads))
 - Azure credentials (Tenant ID, Client ID, Client Secret). [Tutorial on how to create this.](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app?tabs=client-secret). Note: store the ClientSecret somewhere as it will not be displayed again after creation.
 
-Next prerequisites only apply if you want to automate the script using Azure Functions
+Next prerequisites only apply if you want to automate the script using Azure Functions:
 
 - Azure CLI ([how to install](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli))
 - Azure Functions Core Tools ([how to install](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local?tabs=windows%2Cisolated-process%2Cnode-v4%2Cpython-v2%2Chttp-trigger%2Ccontainer-apps&pivots=programming-language-python#install-the-azure-functions-core-tools))
