@@ -72,11 +72,11 @@ Data collection rules (DCRs) are stored in Azure so they can be centrally deploy
 
     If you want to enable both Performance and Map experience of VM Insights
     ```sh
-    cd dcr-templates/PerfAndMapDcr
+    cd arm-templates/dcr-templates/PerfAndMapDcr
     ```
     If you want to enable only Performance experience of VM Insights.
     ```sh
-    cd dcr-templates/PerfOnlyDCR
+    cd arm-templates/dcr-templates/PerfOnlyDCR
     ```
     
     Before deploying the DCR, first set following variables. Note: these are used again further in the script.
