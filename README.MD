@@ -228,6 +228,20 @@ IMPORTANT: When prompted with ***Would you like to overwrite value in azure? [ye
 
 #### Event Grid System Topic
 
+You can deploy the Event Grid System Topic using following commands:
+
+```sh
+cd ../arm-templates/EventGridSystemTopic
+```
+Enter credentials in the [evgrid_parameters.json](arm-templates\EventGridSystemTopic\evgrid_template.json) file.
+
+Next, run following command:
+```sh
+az deployment group create --resource-group $ResourceGroup --template-file evgrid_template.json --parameters evgrid_parameters.json
+```
+
+**Or if you prefer other experiences, below more information.**
+
 1. Create an Event Grid System Topic: [Portal](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics), [Azure CLI](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics-cli) or [ARM template](https://learn.microsoft.com/en-us/azure/event-grid/create-view-manage-system-topics-arm)
 
     Take as Topic Type: Azure Resource Notifications - Resource Management events

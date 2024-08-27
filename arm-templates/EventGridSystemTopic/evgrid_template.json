@@ -1,0 +1,77 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "systemTopics_name": {
+            "defaultValue": null,
+            "type": "String"
+        },
+        "azf_resource_id": {
+            "defaultValue": null,
+            "type": "String"
+        },
+        "eventgrid_subscription_name": {
+            "defaultValue": null,
+            "type": "String"
+        },
+        "function_name": {
+            "defaultValue": null,
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.EventGrid/systemTopics",
+            "apiVersion": "2024-06-01-preview",
+            "name": "[parameters('systemTopics_name')]",
+            "location": "global",
+            "identity": {
+                "type": "None"
+            },
+            "properties": {
+                "source": "/subscriptions/089756e2-63cb-46af-ab4f-e145a774ae05",
+                "topicType": "Microsoft.ResourceNotifications.Resources"
+            }
+        },
+        {
+            "type": "Microsoft.EventGrid/systemTopics/eventSubscriptions",
+            "apiVersion": "2024-06-01-preview",
+            "name": "[concat(parameters('systemTopics_name'),'/', parameters('eventgrid_subscription_name'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.EventGrid/systemTopics', parameters('systemTopics_name'))]"
+            ],
+            "properties": {
+                "destination": {
+                    "properties": {
+                        "resourceId": "[concat(parameters('azf_resource_id'), '/functions/', parameters('function_name'))]",
+                        "maxEventsPerBatch": 1,
+                        "preferredBatchSizeInKilobytes": 64
+                    },
+                    "endpointType": "AzureFunction"
+                },
+                "filter": {
+                    "includedEventTypes": [
+                        "Microsoft.ResourceNotifications.Resources.CreatedOrUpdated"
+                    ],
+                    "enableAdvancedFilteringOnArrays": true,
+                    "advancedFilters": [
+                        {
+                            "values": [
+                                "virtualMachines"
+                            ],
+                            "operatorType": "StringEndsWith",
+                            "key": "data.resourceInfo.type"
+                        }
+                    ]
+                },
+                "labels": [],
+                "eventDeliverySchema": "EventGridSchema",
+                "retryPolicy": {
+                    "maxDeliveryAttempts": 30,
+                    "eventTimeToLiveInMinutes": 1440
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "systemTopics_name": {
+            "value": "" 
+        },
+        "azf_resource_id": {
+            "value": ""
+        },
+        "eventgrid_subscription_name": {
+            "value": ""
+        },
+        "function_name": {
+            "value": ""
+        }
+    }
+}
+
+
+
+
+
