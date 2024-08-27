@@ -127,7 +127,7 @@ az monitor data-collection rule show --resource-group $ResourceGroup --name <nam
 
 1. Enter the *local-script* folder
     ```sh
-    cd ../../local-script
+    cd ../../../local-script
     ```
 2. Open Visual Studio
     ```sh
