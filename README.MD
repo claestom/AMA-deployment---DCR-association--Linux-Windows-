@@ -85,6 +85,7 @@ Data collection rules (DCRs) are stored in Azure so they can be centrally deploy
     $ResourceGroup = "<insert name>"
     $Location = "<set location>"
     $LogAnalyticsWorkspaceName = "<insert name>"
+    $DCRName = "<insert name>"
     ```
     *For the above variables, the PowerShell syntax is being used. If you are using Command Prompt instead, replace the PowerShell variable syntax $Variable with %Variable%.*
     
@@ -99,15 +100,11 @@ Data collection rules (DCRs) are stored in Azure so they can be centrally deploy
     Retrieve the Resource ID of this Log Analytics Workspace by running following command:
 
     ```sh
-    az monitor log-analytics workspace show --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --query id --output tsv
-    ```
-    Next, fill in the values for the parameters in the [DeployDcrParameters.json](dcr-templates/PerfAndMapDcr/DeployDcrParameters.json). *The following command will open VS Code such that you are able to edit the file.*
-    ```sh
-    code .
+    $LAWid=$(az monitor log-analytics workspace show --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --query id --output tsv)
     ```
     Deploy the DCR template to Azure
     ```sh
-    az deployment group create --resource-group $ResourceGroup --template-file DeployDcrTemplate.json --parameters DeployDcrParameters.json
+    az deployment group create --resource-group $ResourceGroup --template-file DeployDcrTemplate.json --parameters WorkspaceResourceId=$LAWid WorkspaceLocation=$Location userGivenDcrName=$DCRName
     ```
 
     More information how to deploy this template can be found [here](https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-enable-overview).
