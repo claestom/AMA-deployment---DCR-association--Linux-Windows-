@@ -123,6 +123,23 @@ Or run following Azure CLI command:
 az monitor data-collection rule show --resource-group $ResourceGroup --name <name selected> --query id --output tsv
 ```
 
+## Assign permissions to the Service Principal 
+
+1. Get ID of the Service Principal created
+
+    ```sh
+    servicePrincipalId=$(az ad sp list --display-name <service-principal-name> --query "[].appId" --output tsv)
+    ```
+2. Define different roles to assign
+    ```sh
+    $roles = @("Log Analytics Reader", "Virtual Machine Contributor") 
+    ```
+3. Assign the roles to the SP
+    ```sh
+    foreach ($role in $roles) { 
+        az role assignment create --assignee $servicePrincipalId --role $role --scope /subscriptions/<subscription-id>
+    } 
+    ```
 ## Local usage to test
 
 1. Enter the *local-script* folder
