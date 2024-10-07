@@ -125,7 +125,7 @@ az monitor data-collection rule show --resource-group $ResourceGroup --name <nam
 1. Get ID of the Service Principal created
 
     ```sh
-    servicePrincipalId=$(az ad sp list --display-name <service-principal-name> --query "[].appId" --output tsv)
+    $servicePrincipalId=$(az ad sp list --display-name <service-principal-name> --query "[].appId" --output tsv)
     ```
 2. Define different roles to assign
     ```sh
