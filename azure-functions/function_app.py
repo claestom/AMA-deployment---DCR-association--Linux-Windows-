@@ -92,7 +92,7 @@ def install_ama_extension(compute_client, extension_name, vm, vm_name, resource_
     }
     extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
     extensions = extensions_result.value  # Access the list of extensions
-    if not extensions or any(extension.name not in ["AzureMonitorWindowsAgent", "AzureMonitorLinuxAgent"] for extension in extensions):
+    if not extensions or all(extension.name not in ["AzureMonitorWindowsAgent", "AzureMonitorLinuxAgent"] for extension in extensions):
         logging.info(f"No Azure Monitor Agent extension found on VM {vm_name}. Proceeding with installation.")
         try:
                 compute_client.virtual_machine_extensions.begin_create_or_update(
@@ -120,7 +120,7 @@ def install_map_extension(compute_client, extension_name, vm, vm_name, resource_
 
     extensions_result = compute_client.virtual_machine_extensions.list(resource_group, vm_name)
     extensions = extensions_result.value  # Access the list of extensions
-    if not extensions or any(extension.name != extension_name for extension in extensions):
+    if not extensions or all(extension.name != extension_name for extension in extensions):
         logging.info(f"No {extension_name} found on VM {vm_name}. Proceeding with installation.")
         try:
                 compute_client.virtual_machine_extensions.begin_create_or_update(
