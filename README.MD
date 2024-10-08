@@ -129,7 +129,7 @@ az monitor data-collection rule show --resource-group $ResourceGroup --name <nam
     ```
 2. Define different roles to assign
     ```sh
-    $roles = @("Log Analytics Reader", "Virtual Machine Contributor") 
+    $roles = @("Log Analytics Reader", "Virtual Machine Contributor", "Monitoring Contributor") 
     ```
 3. Assign the roles to the SP
     ```sh
