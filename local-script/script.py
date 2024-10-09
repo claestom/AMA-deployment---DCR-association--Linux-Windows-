@@ -43,7 +43,7 @@ def check_tag_subscription(subscription_id, credential):
     resource_client = ResourceManagementClient(credential, subscription_id)
     subscription_tags = resource_client.tags.get_at_scope(f"/subscriptions/{subscription_id}")
     tags = subscription_tags.properties.tags
-    if tags.get(SUBSCRIPTION_TAG[0]) == SUBSCRIPTION_TAG[1]:
+    if tags.get(SUBSCRIPTION_TAG[0]) == SUBSCRIPTION_TAG[1] or all(element == "" for element in SUBSCRIPTION_TAG):
         print(f"Subscription {subscription_id} has the required tags. Proceeding.")
         return True
     else:
