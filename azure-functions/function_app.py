@@ -51,7 +51,7 @@ def eventGridTest(event: func.EventGridEvent):
     credential = ClientSecretCredential(tenant_id=TENANT_ID, client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 
     # Get a list of subscriptions
-    subscription_client = SubscriptionClient(credential)
+    subscription_client = SubscriptionClient(credential)   
     
     for subscription in subscription_client.subscriptions.list():
         if check_tag_subscription(subscription.subscription_id, credential) or all(element == "" for element in SUBSCRIPTION_TAG):
