@@ -4,7 +4,7 @@ This script installs the Azure Monitor Agent on an Azure Virtual Machine using t
 
 Once the AMA is being deployed, it will be associated with the specified Data Collection Rule specified in the script. In case the user wants to enable the VM Insights feature on the VM, the ARM template of this DCR is provided in the repo as well under vminsightsdcr.json. This can be deployed to Azure via the custom template deployment in Azure or through PowerShell or Azure CLI.
 
-## Resources
+## Resources - Azure
 
 * [Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/)
 * [Azure Monitor Agent: introduction](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview)
